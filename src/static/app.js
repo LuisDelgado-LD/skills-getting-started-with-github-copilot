@@ -15,17 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Populate activities list
       Object.entries(activities).forEach(([name, details]) => {
-        const activityCard = document.createElement("div");
-        activityCard.className = "activity-card";
-
-        const spotsLeft = details.max_participants - details.participants.length;
-
-        activityCard.innerHTML = `
-          <h4>${name}</h4>
-          <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-        `;
+        const activityCard = createActivityCard({
+          name,
+          description: details.description,
+          schedule: details.schedule,
+          participants: details.participants,
+        });
 
         activitiesList.appendChild(activityCard);
 
@@ -39,6 +34,48 @@ document.addEventListener("DOMContentLoaded", () => {
       activitiesList.innerHTML = "<p>Failed to load activities. Please try again later.</p>";
       console.error("Error fetching activities:", error);
     }
+  }
+
+  function createActivityCard(activity) {
+    const card = document.createElement('div');
+    card.className = 'activity-card';
+    
+    const title = document.createElement('h4');
+    title.textContent = activity.name;
+    
+    const description = document.createElement('p');
+    description.textContent = activity.description;
+    
+    const participantsSection = document.createElement('div');
+    participantsSection.className = 'participants-section';
+    
+    const participantsTitle = document.createElement('h5');
+    participantsTitle.textContent = 'Participants';
+    
+    const participantsList = document.createElement('ul');
+    participantsList.className = 'participants-list';
+    
+    // Add participants if they exist
+    if (activity.participants && activity.participants.length > 0) {
+        activity.participants.forEach(participant => {
+            const li = document.createElement('li');
+            li.textContent = participant;
+            participantsList.appendChild(li);
+        });
+    } else {
+        const li = document.createElement('li');
+        li.textContent = 'No participants yet';
+        participantsList.appendChild(li);
+    }
+    
+    participantsSection.appendChild(participantsTitle);
+    participantsSection.appendChild(participantsList);
+    
+    card.appendChild(title);
+    card.appendChild(description);
+    card.appendChild(participantsSection);
+    
+    return card;
   }
 
   // Handle form submission

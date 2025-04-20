@@ -1,0 +1,16 @@
+<div class="activity-card">
+    // ...existing code...
+    <p class="activity-description">{{ activity.description }}</p>
+    
+    <div class="participants-section">
+        <h4>Participantes:</h4>
+        <ul class="participants-list">
+            {% for participant in activity.participants %}
+            <li>{{ participant }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="button-container">
+    // ...existing code...
+</div>
